@@ -1,24 +1,26 @@
 /**
- * @OnlyCurrentDoc
- *
  * Keratoconus talk: audience poll backend (Google Apps Script web app).
- * Stores one row per answer in this Google Sheet and returns live tallies.
+ * Stores one row per answer in a Google Sheet and returns live tallies.
  *
- * ONE-TIME SETUP (about three minutes)
- *   1. Open a new Google Sheet (type sheets.new in the address bar). Name it "KC poll votes".
- *   2. Extensions > Apps Script. Delete the few lines already there, paste this whole file, press Save.
- *   3. Deploy > New deployment > gear icon next to "Select type" > Web app.
+ * ONE-TIME SETUP
+ *   1. Put this code in an Apps Script project: either open the Google Sheet and use
+ *      Extensions > Apps Script (leave SHEET_ID empty), or a standalone project at
+ *      script.google.com (put the sheet's ID in SHEET_ID).
+ *   2. Deploy > New deployment > gear icon > Web app.
  *        Execute as: Me
  *        Who has access: Anyone
  *      Press Deploy.
- *   4. Authorize access > choose your account > "Google hasn't verified this app" > Advanced >
- *      Go to (unsafe) > Allow. Google shows this for every personal script. Because of the
- *      @OnlyCurrentDoc line above, the script can only touch this one spreadsheet.
- *   5. Copy the Web app URL (it ends in /exec) and put it in config.js on GitHub.
+ *   3. Authorize access > choose your account > "Google hasn't verified this app" >
+ *      Advanced > Go to (unsafe) > Allow. Google shows this for every personal script.
+ *   4. Copy the Web app URL (it ends in /exec) into config.js on GitHub.
  *
  * If you change this file later: Deploy > Manage deployments > pencil > Version: New version > Deploy.
  * The URL stays the same.
  */
+
+// The sheet that stores the votes: the long ID in its address, between /d/ and /edit.
+// Leave empty when this script was opened from the sheet itself.
+var SHEET_ID = '';
 
 var QUESTIONS = { q1: ['A', 'B', 'C', 'D', 'E'], q2: ['A', 'B', 'C', 'D', 'E'] };
 
@@ -243,9 +245,15 @@ function publicState_(s, full, st) {
 
 /* ---------- helpers ---------- */
 
-function votesSheet_() {
+function book_() {
+  if (SHEET_ID) return SpreadsheetApp.openById(SHEET_ID);
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (!ss) throw new Error('Open this script from its Google Sheet (Extensions > Apps Script).');
+  if (!ss) throw new Error('Set SHEET_ID at the top of this file, or open the script from its Google Sheet.');
+  return ss;
+}
+
+function votesSheet_() {
+  var ss = book_();
   var sh = ss.getSheetByName(VOTES_SHEET);
   if (sh) return sh;
   var lock = LockService.getScriptLock();

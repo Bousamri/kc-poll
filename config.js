@@ -2,7 +2,7 @@
 // Paste the Google Apps Script web app URL between the quotes (it ends in /exec).
 // While it is empty, both pages run in demo mode and nothing is saved.
 window.POLL_CONFIG = {
-  api: "",
+  api: "https://script.google.com/macros/s/AKfycbxFd0MWjVnPA5pT8A6_JgNL_AlV17tw2iskueEC78g78oMil9qlUK46ASYvL_IsqRqp/exec",
 
   // Countdown shown on each phone, in seconds.
   voteSeconds: 30,
