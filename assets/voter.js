@@ -15,7 +15,6 @@
   st.reveal = st.reveal || {};
   st.counts = st.counts || {};
   st.late = st.late || {};
-  if (!st.firstOpen) st.firstOpen = Date.now();
   save();
 
   var app = document.getElementById('app');
@@ -62,6 +61,27 @@
   noticeEl.hidden = true;
   app.appendChild(noticeEl);
 
+  var SECS = Number(cfg.voteSeconds) || 45;
+  var introSec = P.el('section', 'intro');
+  introSec.hidden = true;
+  introSec.innerHTML =
+    '<div class="intro-mark">' + P.placidoSVG(6, 1.4) + '</div>' +
+    '<p class="eyebrow">Audience poll</p>' +
+    '<h1 class="intro-title">Two quick questions</h1>' +
+    '<p class="lede">How common is keratoconus in the Middle East and North Africa? Give your best guess. The answers come later in the talk.</p>' +
+    '<ul class="intro-list"><li>Anonymous, no sign-in</li><li>' + SECS + ' seconds once you tap Start</li>' +
+    '<li>You can change an answer until it is revealed</li></ul>' +
+    '<button type="button" class="btn-start" data-start>Start</button>';
+  introSec.addEventListener('click', function (ev) {
+    if (ev.target.closest('[data-start]')) {
+      st.started = Date.now();
+      save();
+      go(firstView());
+    }
+  });
+  app.appendChild(introSec);
+  sections.intro = introSec;
+
   QS.forEach(function (q, i) {
     var sec = P.el('section', 'qview');
     sec.setAttribute('data-q', q.id);
@@ -102,6 +122,8 @@
 
   /* ---------- navigation ---------- */
   function firstView() {
+    var anyAnswer = ORDER.some(function (id) { return st.answers[id]; });
+    if (!st.started && !anyAnswer && openIds().length) return 'intro';
     for (var k = 0; k < ORDER.length; k++) {
       if (!st.answers[ORDER[k]] && !st.reveal[ORDER[k]]) return ORDER[k];
     }
@@ -128,14 +150,14 @@
     if (id === 'done') {
       renderDone(true);
       scheduleRevealCheck(opts.soon ? 1200 : firstCheckDelay());
-    } else {
+    } else if (id !== 'intro') {
       mark(id);
     }
     noticeEl.textContent = notice;
     noticeEl.hidden = !notice || id === 'done';
     var bars = progressEl.children;
     for (var i = 0; i < bars.length; i++) bars[i].classList.toggle('on', i <= ORDER.indexOf(id));
-    progressEl.hidden = id === 'done';
+    progressEl.hidden = id === 'done' || id === 'intro';
     renderFoot();
     tickTimer();
     if (!opts.first) window.scrollTo(0, 0);
@@ -170,7 +192,7 @@
         delete st.late[id];
       }
     });
-    st.firstOpen = Date.now();
+    st.started = Date.now();
     save();
     go(firstView());
   }
@@ -269,7 +291,7 @@
     st.counts = {};
     st.late = {};
     st.round = round;
-    st.firstOpen = Date.now();
+    st.started = 0;
     save();
     notice = 'The poll was restarted. Please answer again.';
     go(firstView());
@@ -316,7 +338,7 @@
 
   function ensureAnswers() {
     if (window.POLL_ANSWERS || answersLoading) return;
-    answersLoading = P.loadScript('assets/answers.js?v=2').then(function () {
+    answersLoading = P.loadScript('assets/answers.js?v=3').then(function () {
       if (view === 'done') renderDone(false);
     }, function () {
       answersLoading = null;
@@ -423,12 +445,12 @@
     footRight.innerHTML = bits.join(' · ');
   }
 
-  /* ---------- countdown: each phone gets the same number of seconds from first opening ---------- */
+  /* ---------- countdown: each phone gets the same number of seconds from tapping Start ---------- */
   function tickTimer() {
     cancelAnimationFrame(timerRAF);
-    if (view === 'done') { timerEl.hidden = true; return; }
-    var total = Number(cfg.voteSeconds) || 30;
-    var rem = total - (Date.now() - st.firstOpen) / 1000;
+    if (view === 'done' || view === 'intro' || !st.started) { timerEl.hidden = true; return; }
+    var total = SECS;
+    var rem = total - (Date.now() - st.started) / 1000;
     if (rem <= -60) { timerEl.hidden = true; return; }
     timerEl.hidden = false;
     if (rem <= 0) {

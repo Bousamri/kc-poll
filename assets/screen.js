@@ -8,7 +8,7 @@
   var QS = window.POLL.questions;
   var K = window.POLL_ANSWERS;
   var ORDER = QS.map(function (q) { return q.id; });
-  var DUR = Number(cfg.voteSeconds) || 30;
+  var DUR = Number(cfg.voteSeconds) || 45;
   var esc = P.esc;
 
   var key = readKey();

@@ -160,6 +160,24 @@ a { color: var(--teal-hi); }
   color: var(--muted); font-size: 15px; cursor: pointer; align-self: flex-start;
 }
 
+/* intro */
+.intro-mark { width: 74px; height: 74px; margin: 6px 0 18px; }
+.intro-mark svg { width: 100%; height: 100%; display: block; }
+.intro-mark circle { fill: none; stroke: var(--teal-hi); stroke-width: 2.2; }
+.intro-title { font-size: 30px; line-height: 1.15; margin: 4px 0 10px; letter-spacing: -0.015em; }
+.intro-list { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 11px; }
+.intro-list li { display: flex; gap: 11px; align-items: baseline; color: var(--ink-2); font-size: 16px; }
+.intro-list li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--teal-hi); flex: none; transform: translateY(-2px); }
+.btn-start {
+  width: 100%; min-height: 58px; border-radius: 14px;
+  border: 1px solid var(--teal-hi); background: var(--teal); color: #fff;
+  font-size: 19px; font-weight: 750; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  box-shadow: 0 0 0 4px rgba(91, 192, 204, 0.16), 0 12px 26px -14px rgba(0, 0, 0, 0.7);
+  transition: transform 0.1s ease;
+}
+.btn-start:active { transform: scale(0.985); }
+
 /* done + reveal */
 .done-mark { width: 58px; height: 58px; margin: 6px 0 4px; }
 .done-mark svg { width: 100%; height: 100%; display: block; overflow: visible; }
