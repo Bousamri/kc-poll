@@ -70,7 +70,7 @@
     '<h1 class="intro-title">Two quick questions</h1>' +
     '<p class="lede">How common is keratoconus in the Middle East and North Africa? Give your best guess. The answers come later in the talk.</p>' +
     '<ul class="intro-list"><li>Anonymous, no sign-in</li><li>' + SECS + ' seconds once you tap Start</li>' +
-    '<li>You can change an answer until it is revealed</li></ul>' +
+    '<li>Your first tap is final</li></ul>' +
     '<button type="button" class="btn-start" data-start>Start</button>';
   introSec.addEventListener('click', function (ev) {
     if (ev.target.closest('[data-start]')) {
@@ -94,14 +94,11 @@
         '<span class="opt-main">' + P.esc(o.main) + '</span>' +
         '<span class="opt-sub">' + P.esc(o.sub) + '<span class="tick">' + TICK + '</span></span></button>';
     });
-    h += '</div><p class="hint">Tap one. You can change it until the answer is shown.</p>';
-    if (i > 0) h += '<button type="button" class="back" data-back="' + QS[i - 1].id + '">← Question ' + i + '</button>';
+    h += '</div><p class="hint">Tap one. Your first tap is final.</p>';
     sec.innerHTML = h;
     sec.addEventListener('click', function (ev) {
       var b = ev.target.closest('.opt');
-      if (b) { choose(q.id, b.getAttribute('data-c')); return; }
-      var bk = ev.target.closest('[data-back]');
-      if (bk) go(bk.getAttribute('data-back'));
+      if (b) choose(q.id, b.getAttribute('data-c'));
     });
     app.appendChild(sec);
     sections[q.id] = sec;
@@ -112,12 +109,9 @@
   app.appendChild(doneSec);
   sections.done = doneSec;
   doneSec.addEventListener('click', function (ev) {
-    var t = ev.target.closest('[data-edit]');
-    if (t) { go(t.getAttribute('data-edit')); return; }
+    var t = ev.target.closest('[data-answer]');
+    if (t) { go(t.getAttribute('data-answer')); return; }
     if (ev.target.closest('[data-demo-reveal]')) demoReveal();
-  });
-  footRight.addEventListener('click', function (ev) {
-    if (ev.target.closest('[data-again]')) again();
   });
 
   /* ---------- navigation ---------- */
@@ -165,14 +159,17 @@
 
   function mark(qid) {
     var sec = sections[qid];
+    var locked = !!st.answers[qid];
+    sec.classList.toggle('locked', locked);
     var btns = sec.querySelectorAll('.opt');
     for (var i = 0; i < btns.length; i++) {
       btns[i].setAttribute('aria-checked', btns[i].getAttribute('data-c') === st.answers[qid] ? 'true' : 'false');
+      btns[i].setAttribute('aria-disabled', locked ? 'true' : 'false');
     }
   }
 
   function choose(qid, c) {
-    if (st.reveal[qid]) return;
+    if (st.reveal[qid] || st.answers[qid]) return; // the first tap is final
     clearTimeout(advanceT);
     st.answers[qid] = c;
     delete st.late[qid];
@@ -182,19 +179,6 @@
     try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) { /* not supported */ }
     flush();
     advanceT = setTimeout(function () { go(nextView(qid)); }, 420);
-  }
-
-  function again() {
-    ORDER.forEach(function (id) {
-      if (!st.reveal[id]) {
-        delete st.answers[id];
-        delete st.sent[id];
-        delete st.late[id];
-      }
-    });
-    st.started = Date.now();
-    save();
-    go(firstView());
   }
 
   /* ---------- sending ---------- */
@@ -338,7 +322,7 @@
 
   function ensureAnswers() {
     if (window.POLL_ANSWERS || answersLoading) return;
-    answersLoading = P.loadScript('assets/answers.js?v=3').then(function () {
+    answersLoading = P.loadScript('assets/answers.js?v=4').then(function () {
       if (view === 'done') renderDone(false);
     }, function () {
       answersLoading = null;
@@ -378,10 +362,10 @@
     var h = '<article class="card"><p class="eyebrow">Question ' + (i + 1) + ' · ' + P.esc(q.tag) + '</p>';
     if (o) {
       h += '<div class="yours"><div><span class="lbl">Your answer</span><b>' + P.esc(o.main) + '</b><span class="pc">' +
-        P.esc(o.sub) + '</span></div><button type="button" class="link" data-edit="' + id + '">Change</button></div>';
+        P.esc(o.sub) + '</span></div></div>';
     } else {
       h += '<div class="yours"><div><span class="lbl">Not answered yet</span></div>' +
-        '<button type="button" class="link" data-edit="' + id + '">Answer</button></div>';
+        '<button type="button" class="link" data-answer="' + id + '">Answer</button></div>';
     }
     return h + '<p class="wait">The answer appears here when it is shown on screen.</p></article>';
   }
@@ -439,9 +423,6 @@
     var bits = [];
     if (S !== 'live') bits.push('<span class="demo-flag">Session: ' + P.esc(S) + '</span>');
     if (P.demo) bits.push('<span class="demo-flag">Demo: nothing is sent</span>');
-    if (view === 'done' && openIds().length && ORDER.some(function (id) { return st.answers[id]; })) {
-      bits.push('<button type="button" class="link" data-again>Answer again</button>');
-    }
     footRight.innerHTML = bits.join(' · ');
   }
 

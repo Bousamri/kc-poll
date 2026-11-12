@@ -53,7 +53,7 @@ Use `?s=test` on both pages. Rehearsal votes never mix with the live ones. With 
 * Each phone gets a random ID, stored on that phone only. No names, emails or sign-ins.
 * Phones open on a short start screen; each person's 45-second countdown (set in `config.js`) begins when they tap Start.
 * An answer is sent the moment it is tapped. If the network drops, it stays on the phone and is retried automatically.
-* People can change their answer until it is revealed; only their latest answer counts.
+* Answers lock on the first tap: there is no way to go back or change them.
 * Answers that arrive after a question is revealed are stored but not counted.
 * Phones only check for the reveal while the screen is on, every 20 to 30 seconds, which keeps the load on the Google script small.
 
