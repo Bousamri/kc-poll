@@ -270,24 +270,24 @@ a { color: var(--teal-hi); }
   font-size: max(12px, 1.9vh); letter-spacing: 0.14em; text-transform: uppercase;
   font-weight: 700; color: var(--teal-hi);
 }
-.join-title { margin: 0 0 2.2vh; font-size: 7.6vh; line-height: 1.02; letter-spacing: -0.025em; font-weight: 800; }
-.join-url { font-family: var(--mono); font-size: 3vh; color: var(--ink-2); margin: 0 0 4.6vh; letter-spacing: -0.01em; word-break: break-all; }
+.join-title { margin: 0 0 2.2vh; font-size: min(7.6vh, 5vw); line-height: 1.02; letter-spacing: -0.025em; font-weight: 800; }
+.join-url { font-family: var(--mono); font-size: min(3vh, 1.9vw); color: var(--ink-2); margin: 0 0 4.6vh; letter-spacing: -0.01em; word-break: break-all; }
 .join-url b { color: var(--teal-hi); font-weight: 700; }
 .join-row { display: flex; align-items: center; gap: 4.6vw; }
-.clock { position: relative; width: 21vh; height: 21vh; flex: none; }
+.clock { position: relative; width: min(21vh, 15vw); height: min(21vh, 15vw); flex: none; }
 .clock svg { width: 100%; height: 100%; display: block; }
 .clock circle { fill: none; stroke: var(--teal-hi); stroke-width: 1.5; }
 .clock.over circle { stroke: var(--muted); }
 .clock-num {
   position: absolute; inset: 0; display: grid; place-items: center;
-  font-size: 7.2vh; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
+  font-size: min(7.2vh, 5vw); font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.03em;
   padding-top: 1.4vh;
 }
 .clock-cap {
   display: block; font-size: max(11px, 1.6vh); color: var(--muted); text-align: center;
   margin-top: 1.2vh; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700;
 }
-.tally-num { display: block; font-size: 11.5vh; line-height: 0.95; font-weight: 800; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.tally-num { display: block; font-size: min(11.5vh, 8vw); line-height: 0.95; font-weight: 800; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
 .tally-num.bump { animation: bump 0.45s ease; }
 .tally-lbl { display: block; font-size: 2.3vh; color: var(--muted); margin-top: 1vh; }
 .join-note { margin: 4.6vh 0 0; color: var(--dim); font-size: 2vh; }

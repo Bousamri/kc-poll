@@ -316,7 +316,7 @@
 
   function ensureAnswers() {
     if (window.POLL_ANSWERS || answersLoading) return;
-    answersLoading = P.loadScript('assets/answers.js?v=1').then(function () {
+    answersLoading = P.loadScript('assets/answers.js?v=2').then(function () {
       if (view === 'done') renderDone(false);
     }, function () {
       answersLoading = null;
