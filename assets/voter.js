@@ -61,14 +61,14 @@
   noticeEl.hidden = true;
   app.appendChild(noticeEl);
 
-  var SECS = Number(cfg.voteSeconds) || 45;
+  var SECS = Number(cfg.voteSeconds) || 30;
   var introSec = P.el('section', 'intro');
   introSec.hidden = true;
   introSec.innerHTML =
     '<div class="intro-mark">' + P.placidoSVG(6, 1.4) + '</div>' +
     '<p class="eyebrow">Audience poll</p>' +
     '<h1 class="intro-title">Two quick questions</h1>' +
-    '<p class="lede">How common is keratoconus in the Middle East and North Africa? Give your best guess. The answers come later in the talk.</p>' +
+    '<p class="lede">How common do you think keratoconus is in the Middle East and North Africa? Give your best guess. The answers come later in the talk.</p>' +
     '<ul class="intro-list"><li>Anonymous, no sign-in</li><li>' + SECS + ' seconds once you tap Start</li>' +
     '<li>Your first tap is final</li></ul>' +
     '<button type="button" class="btn-start" data-start>Start</button>';
@@ -322,7 +322,7 @@
 
   function ensureAnswers() {
     if (window.POLL_ANSWERS || answersLoading) return;
-    answersLoading = P.loadScript('assets/answers.js?v=4').then(function () {
+    answersLoading = P.loadScript('assets/answers.js?v=5').then(function () {
       if (view === 'done') renderDone(false);
     }, function () {
       answersLoading = null;

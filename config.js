@@ -5,7 +5,7 @@ window.POLL_CONFIG = {
   api: "https://script.google.com/macros/s/AKfycbxFd0MWjVnPA5pT8A6_JgNL_AlV17tw2iskueEC78g78oMil9qlUK46ASYvL_IsqRqp/exec",
 
   // Countdown on each phone, in seconds. It starts when the person taps Start.
-  voteSeconds: 45,
+  voteSeconds: 30,
 
   // Optional: a link shown on phones after voting (for example your slides or Drive folder).
   // Leave "" to hide it.

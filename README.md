@@ -51,7 +51,7 @@ Use `?s=test` on both pages. Rehearsal votes never mix with the live ones. With 
 
 ## How it behaves
 * Each phone gets a random ID, stored on that phone only. No names, emails or sign-ins.
-* Phones open on a short start screen; each person's 45-second countdown (set in `config.js`) begins when they tap Start.
+* Phones open on a short start screen; each person's 30-second countdown (set in `config.js`) begins when they tap Start.
 * An answer is sent the moment it is tapped. If the network drops, it stays on the phone and is retried automatically.
 * Answers lock on the first tap: there is no way to go back or change them.
 * Answers that arrive after a question is revealed are stored but not counted.

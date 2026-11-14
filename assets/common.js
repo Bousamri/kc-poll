@@ -3,7 +3,7 @@
   'use strict';
 
   var cfg = Object.assign(
-    { api: '', voteSeconds: 45, materialsUrl: '', materialsLabel: '' },
+    { api: '', voteSeconds: 30, materialsUrl: '', materialsLabel: '' },
     window.POLL_CONFIG || {}
   );
   var params = new URLSearchParams(location.search);

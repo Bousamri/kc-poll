@@ -7,7 +7,7 @@ window.POLL = {
     {
       id: "q1",
       tag: "General population",
-      text: "In the general population of the Middle East and North Africa, how common is clinically manifest keratoconus?",
+      text: "How common do you think clinically manifest keratoconus is in the general population of the Middle East and North Africa?",
       options: [
         { id: "A", main: "1 in 2,000", sub: "0.05%" },
         { id: "B", main: "1 in 350", sub: "0.3%" },
@@ -19,7 +19,7 @@ window.POLL = {
     {
       id: "q2",
       tag: "Refractive-surgery candidates",
-      text: "Among people screened for refractive surgery (LASIK or PRK) in the region, how common is clinically manifest keratoconus?",
+      text: "Among people screened for refractive surgery (LASIK or PRK) in the region, how common do you think clinically manifest keratoconus is?",
       options: [
         { id: "A", main: "1 in 800", sub: "0.1%" },
         { id: "B", main: "1 in 100", sub: "1%" },
